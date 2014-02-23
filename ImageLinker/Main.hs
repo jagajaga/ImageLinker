@@ -92,7 +92,6 @@ nextOrPrevPicture images ref image keyName' sizeW = do
     nextPicture <- readIORef ref >>= return . (\a -> if a == -1 then (length images) - 1 else if a == length images then 0 else a) . way
     writeIORef ref (nextPicture)
     (w, h) <- readIORef sizeW
-    print (w, h)
     pixbuf <- pixbufNewFromFileAtSize (images !! nextPicture) w h
     imageSetFromPixbuf image pixbuf
     return nextPicture
@@ -109,7 +108,6 @@ resizeAll sizeW image images currentPicture = do
         liftIO $ writeIORef sizeW (w, h)
         pixbuf <- liftIO $ pixbufNewFromFileAtSize (images !! cp) w h
         liftIO $ imageSetFromPixbuf image pixbuf
-        liftIO $ print (w, h)
         return False
 
 main :: IO ()
