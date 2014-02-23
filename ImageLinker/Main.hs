@@ -12,6 +12,7 @@ import           Filesystem.Path.CurrentOS
 
 import           System.Directory
 import           System.Environment
+import           System.Exit
 import           System.Posix.Files
 
 import           Data.IORef
@@ -112,11 +113,12 @@ resizeAll sizeW image images currentPicture = do
 
 main :: IO ()
 main = do
+    args <- getArgs
+    if args == [] then print "Usage: ImageLinker <Folder Name> [<Folder for links>]" >> exitSuccess else return ()
     initGUI
     window <- windowNew
     set window [windowTitle := "ImageLinker"]
     vbox <- vBoxNew False 0
-
     path <- getArgs >>= return . (\a -> if last a /= '/' then a ++ "/" else a) . head
     outputFolder <- getArgs >>= return . (\a -> if a == "" then path ++ "Favorites" else a) . getSnd
     createDirectoryIfMissing True outputFolder
